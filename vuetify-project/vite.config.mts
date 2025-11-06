@@ -9,15 +9,16 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
-import { defineConfig, loadEnv } from 'vite'   // <- loadEnv hinzufügen
+import { defineConfig, loadEnv } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Für GitHub Pages: im CI (Actions) automatisch /<repo>/, lokal '/'
+  // GitHub Pages: im CI automatisch /<repo>/; lokal '/'
   const env = loadEnv(mode, process.cwd(), '')
   const repo = (env.GITHUB_REPOSITORY || '').split('/')[1]
-  const base = env.GITHUB_ACTIONS && repo ? `/${repo}/` : '/'
+  const override = env.PUBLIC_BASE || env.VITE_PUBLIC_BASE || ''
+  const base = override || (env.GITHUB_ACTIONS && repo ? `/${repo}/` : '/')
 
   return {
     base,
@@ -37,7 +38,11 @@ export default defineConfig(({ mode }) => {
         styles: { configFile: 'src/styles/settings.scss' },
       }),
       Fonts({
-        fontsource: { families: [{ name: 'Roboto', weights: [100,300,400,500,700,900], styles: ['normal','italic'] }] },
+        fontsource: {
+          families: [
+            { name: 'Roboto', weights: [100, 300, 400, 500, 700, 900], styles: ['normal', 'italic'] },
+          ],
+        },
       }),
     ],
     optimizeDeps: {
@@ -51,9 +56,10 @@ export default defineConfig(({ mode }) => {
     },
     define: { 'process.env': {} },
     resolve: {
-      alias: { '@': fileURLToPath(new URL('src', import.meta.url)) },
+      alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }, // './src' ist korrekt
       extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx', '.vue'],
     },
     server: { port: 3000 },
+    build: { outDir: 'dist' },
   }
 })

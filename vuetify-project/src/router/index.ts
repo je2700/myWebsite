@@ -1,17 +1,17 @@
 /**
- * router/index.ts
  * Automatic routes for `./src/pages/*.vue`
  */
-import { createRouter, createWebHashHistory } from 'vue-router' // <- Hash statt History
+import { createRouter, createWebHashHistory } from 'vue-router' // Hash für GitHub Pages
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL), // <- hier auch Hash
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
+  scrollBehavior: () => ({ top: 0 }),
 })
 
-// Workaround bleibt wie gehabt:
+// Workaround für Vite-Dynamic-Import
 router.onError((err, to) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (localStorage.getItem('vuetify:dynamic-reload')) {
