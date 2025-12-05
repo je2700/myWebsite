@@ -133,7 +133,7 @@
             <!-- Projektzähler -->
             <v-card class="project-badge" elevation="8" rounded="lg">
               <v-card-text class="project-content">
-                <div class="project-number">4+</div>
+                <div class="project-number">5+</div>
                 <div class="project-label">Projekte</div>
               </v-card-text>
             </v-card>

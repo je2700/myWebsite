@@ -506,19 +506,6 @@
                 Kontakt aufnehmen
               </v-btn>
               
-              <v-btn 
-                variant="outlined" 
-                size="x-large" 
-                href="https://linkedin.com/in/yourprofile"
-                target="_blank"
-                class="cta-btn secondary"
-                rounded="lg"
-              >
-                <template v-slot:prepend>
-                  <v-icon icon="mdi-linkedin" />
-                </template>
-                Auf LinkedIn verbinden
-              </v-btn>
             </div>
           </v-card-text>
 

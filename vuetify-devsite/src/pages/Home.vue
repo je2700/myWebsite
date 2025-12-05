@@ -42,7 +42,7 @@
                 <v-icon icon="mdi-source-repository" size="24" color="primary" />
               </div>
               <div class="stat-info">
-                <div class="stat-number">4+</div>
+                <div class="stat-number">5+</div>
                 <div class="stat-label">Repositories</div>
               </div>
             </div>
@@ -60,7 +60,7 @@
                 <v-icon icon="mdi-source-branch" size="24" color="success" />
               </div>
               <div class="stat-info">
-                <div class="stat-number">2+</div>
+                <div class="stat-number">5+</div>
                 <div class="stat-label">Forks</div>
               </div>
             </div>
