@@ -41,7 +41,7 @@
           <!-- Statistiken -->
           <div class="hero-stats">
             <div class="stat-item">
-              <div class="stat-number">4+</div>
+              <div class="stat-number">5+</div>
               <div class="stat-label">Projekte</div>
             </div>
             <div class="stat-item">

@@ -47,17 +47,17 @@
               <v-icon icon="mdi-source-repository" size="32" color="primary" />
             </div>
             <div class="stat-content">
-              <div class="stat-number">4+</div>
+              <div class="stat-number">5+</div>
               <div class="stat-label">Repositorys</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon">
-              <v-icon icon="mdi-star" size="32" color="warning" />
+              <v-icon icon="mdi-package-variant" size="32" color="secondary" />
             </div>
             <div class="stat-content">
-              <div class="stat-number">0+</div>
-              <div class="stat-label">Erhaltene Sterne</div>
+              <div class="stat-number">5+</div>
+              <div class="stat-label">Produkte</div>
             </div>
           </div>
           <div class="stat-card">
@@ -65,7 +65,7 @@
               <v-icon icon="mdi-source-fork" size="32" color="success" />
             </div>
             <div class="stat-content">
-              <div class="stat-number">2+</div>
+              <div class="stat-number">5+</div>
               <div class="stat-label">Forks</div>
             </div>
           </div>

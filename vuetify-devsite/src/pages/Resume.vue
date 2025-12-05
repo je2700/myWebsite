@@ -65,7 +65,7 @@
               <v-icon icon="mdi-rocket" size="32" color="warning" />
             </div>
             <div class="stat-content">
-              <div class="stat-number">4+</div>
+              <div class="stat-number">5+</div>
               <div class="stat-label">Projekte</div>
             </div>
           </div>
