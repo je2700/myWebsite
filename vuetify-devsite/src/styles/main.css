@@ -1,0 +1,6 @@
+html, body, #app { height: 100%; }
+body { font-synthesis-weight: none; text-rendering: optimizeLegibility; }
+.code {
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace;
+font-size: 0.9rem;
+}
