@@ -14,7 +14,7 @@
           <v-img src="/api/placeholder/48/48" alt="Profil" />
         </v-avatar>
         <div class="drawer-info">
-          <div class="drawer-name">Dein Name</div>
+          <div class="drawer-name">Jehad Qassem</div>
           <div class="drawer-title">Full-Stack-Entwickler</div>
         </div>
       </div>
@@ -140,7 +140,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import FooterBar from '../components/FooterBar.vue'
 
-const title = 'DevPortfolio'
+const title = 'Jehad Qassem'
 const drawer = ref(false)
 const scrolled = ref(false)
 const route = useRoute()

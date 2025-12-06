@@ -51,15 +51,6 @@
               <div class="stat-label">Jahre Erfahrung</div>
             </div>
           </div>
-          <!--<div class="stat-card">
-            <div class="stat-icon">
-              <v-icon icon="mdi-office-building" size="32" color="success" />
-            </div>
-            <div class="stat-content">
-              <div class="stat-number">3</div>
-              <div class="stat-label">Unternehmen</div>
-            </div>
-          </div>-->
           <div class="stat-card">
             <div class="stat-icon">
               <v-icon icon="mdi-rocket" size="32" color="warning" />
@@ -530,15 +521,28 @@ const quickSkills = [
 ]
 
 function downloadResume() {
-  // In a real application, this would download a PDF file
-  const link = document.createElement('a')
-  link.href = '/resume.pdf'
-  link.download = 'Your-Name-Resume.pdf'
-  link.click()
+  // Prüfe, ob PDF existiert, sonst öffne GitHub
+  const pdfUrl = '/lebenslauf.pdf'
   
-  // For demo purposes, show a notification
-  // You can use a snackbar or toast notification here
-  console.log('Downloading resume...')
+  // Versuche PDF zu laden
+  fetch(pdfUrl, { method: 'HEAD' })
+    .then(response => {
+      if (response.ok) {
+        // PDF existiert - Download starten
+        const link = document.createElement('a')
+        link.href = pdfUrl
+        link.download = 'Lebenslauf-je2700.pdf'
+        link.target = '_blank'
+        link.click()
+      } else {
+        // PDF nicht gefunden - Alternative anbieten
+        window.open('https://github.com/je2700', '_blank')
+      }
+    })
+    .catch(() => {
+      // Bei Fehler zu GitHub weiterleiten
+      window.open('https://github.com/je2700', '_blank')
+    })
 }
 </script>
 
