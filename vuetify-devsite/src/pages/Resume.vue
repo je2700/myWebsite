@@ -521,28 +521,11 @@ const quickSkills = [
 ]
 
 function downloadResume() {
-  // Prüfe, ob PDF existiert, sonst öffne GitHub
-  const pdfUrl = '/lebenslauf.pdf'
-  
-  // Versuche PDF zu laden
-  fetch(pdfUrl, { method: 'HEAD' })
-    .then(response => {
-      if (response.ok) {
-        // PDF existiert - Download starten
-        const link = document.createElement('a')
-        link.href = pdfUrl
-        link.download = 'Lebenslauf-je2700.pdf'
-        link.target = '_blank'
-        link.click()
-      } else {
-        // PDF nicht gefunden - Alternative anbieten
-        window.open('https://github.com/je2700', '_blank')
-      }
-    })
-    .catch(() => {
-      // Bei Fehler zu GitHub weiterleiten
-      window.open('https://github.com/je2700', '_blank')
-    })
+  // Direkter Download der PDF-Datei
+  const link = document.createElement('a')
+  link.href = '/lebenslauf.pdf'
+  link.download = 'Lebenslauf-Jehad-Qassem.pdf'
+  link.click()
 }
 </script>
 
