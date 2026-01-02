@@ -1,40 +1,50 @@
 <template>
-  <v-footer 
-    app 
+  <v-footer
+    app
     class="custom-footer"
     :class="{ 'footer-scrolled': scrolled, 'footer-fixed': fixed }"
     height="80"
   >
     <!-- Main Footer Content -->
     <v-container class="footer-container">
+      <!-- Scroll progress (subtle) -->
+      <v-progress-linear
+        :model-value="scrollProgress"
+        height="2"
+        rounded
+        class="footer-progress"
+      />
+
       <div class="footer-content">
-        <!-- Left Section - Copyright -->
+        <!-- Left Section -->
         <div class="footer-left">
           <div class="copyright-section">
             <v-icon icon="mdi-heart" size="16" class="heart-icon" />
             <span class="copyright-text">
-              © {{ currentYear }} · 
+              © {{ currentYear }} ·
               <span class="name-gradient">Jehad Qassem</span>
             </span>
-            <v-chip 
-              variant="outlined" 
-              size="x-small" 
+
+            <v-chip
+              variant="outlined"
+              size="x-small"
               class="version-chip"
               color="primary"
             >
-              v1.0.0
+              v{{ appVersion }}
             </v-chip>
           </div>
+
           <div class="footer-message">
-            Built with 
+            Built with
             <v-icon icon="mdi-vuejs" size="16" class="tech-icon" color="#41b883" />
-            Vue 3 & 
+            Vue 3 &
             <v-icon icon="mdi-vuetify" size="16" class="tech-icon" color="#1867C0" />
             Vuetify
           </div>
         </div>
 
-        <!-- Right Section - Social Links -->
+        <!-- Right Section -->
         <div class="footer-right">
           <div class="social-links">
             <v-tooltip
@@ -43,7 +53,7 @@
               location="top"
               transition="slide-y-transition"
             >
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-btn
                   v-bind="props"
                   :icon="link.icon"
@@ -54,6 +64,7 @@
                   class="social-btn"
                   :class="`social-${link.name.toLowerCase()}`"
                   size="small"
+                  :aria-label="link.ariaLabel"
                 >
                   <v-icon :icon="link.icon" size="20" />
                   <div class="social-glow" />
@@ -61,23 +72,43 @@
               </template>
               <span>{{ link.tooltip }}</span>
             </v-tooltip>
-            
-            <!-- Theme Toggle -->
+
+            <!-- Copy email -->
             <v-tooltip location="top" transition="slide-y-transition">
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  icon="mdi-content-copy"
+                  variant="text"
+                  class="social-btn social-copy"
+                  size="small"
+                  @click="copyEmail"
+                  aria-label="E-Mail kopieren"
+                >
+                  <v-icon icon="mdi-content-copy" size="20" />
+                  <div class="social-glow" />
+                </v-btn>
+              </template>
+              <span>E-Mail kopieren</span>
+            </v-tooltip>
+
+            <!-- Theme toggle (light/dark/system) -->
+            <v-tooltip location="top" transition="slide-y-transition">
+              <template #activator="{ props }">
                 <v-btn
                   v-bind="props"
                   :icon="themeIcon"
                   variant="text"
-                  @click="toggleTheme"
+                  @click="cycleTheme"
                   class="theme-btn"
                   size="small"
+                  aria-label="Theme wechseln"
                 >
                   <v-icon :icon="themeIcon" size="20" />
                   <div class="theme-glow" />
                 </v-btn>
               </template>
-              <span>{{ isDark ? 'Zum hellen Modus wechseln' : 'Zum dunklen Modus wechseln' }}</span>
+              <span>{{ themeTooltip }}</span>
             </v-tooltip>
           </div>
         </div>
@@ -86,9 +117,20 @@
       <!-- Footer Wave -->
       <div class="footer-wave">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
-          <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
-          <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+          <path
+            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+            opacity=".25"
+            class="shape-fill"
+          />
+          <path
+            d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"
+            opacity=".5"
+            class="shape-fill"
+          />
+          <path
+            d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"
+            class="shape-fill"
+          />
         </svg>
       </div>
     </v-container>
@@ -103,10 +145,16 @@
         @click="scrollToTop"
         color="primary"
         size="small"
+        aria-label="Nach oben scrollen"
       >
         <v-icon icon="mdi-chevron-up" />
       </v-btn>
     </v-fade-transition>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" timeout="1800" location="top" class="footer-snackbar">
+      {{ snackbarText }}
+    </v-snackbar>
   </v-footer>
 </template>
 
@@ -116,35 +164,95 @@ import { useTheme } from 'vuetify'
 
 const theme = useTheme()
 const currentYear = new Date().getFullYear()
+
 const scrolled = ref(false)
 const fixed = ref(false)
-const isDark = ref<boolean>(JSON.parse(localStorage.getItem('theme:isDark') ?? 'false'))
+const scrollProgress = ref(0)
 
-const username = import.meta.env.VITE_GITHUB_USERNAME || 'yourusername'
+const snackbar = ref(false)
+const snackbarText = ref('')
+
+const username = import.meta.env.VITE_GITHUB_USERNAME || 'je2700'
+
+// Optional: set via VITE_APP_VERSION in build/CI
+const appVersion = import.meta.env.VITE_APP_VERSION ?? 'dev'
+
+const emailAddress = 'qassemjehad@outlook.de'
+const repoUrl = `https://github.com/${username}`
 
 const socialLinks = [
   {
     name: 'GitHub',
     icon: 'mdi-github',
-    url: `https://github.com/${username}`,
-    tooltip: 'Sehen Sie sichh meinen Code auf GitHub an'
+    url: repoUrl,
+    tooltip: 'Code auf GitHub ansehen',
+    ariaLabel: 'GitHub Profil öffnen'
+  },
+  {
+    name: 'Source',
+    icon: 'mdi-source-repository',
+    url: repoUrl,
+    tooltip: 'Source Code ansehen',
+    ariaLabel: 'Source Code öffnen'
+  },
+  {
+    name: 'Issues',
+    icon: 'mdi-bug',
+    url: `${repoUrl}/issues`,
+    tooltip: 'Bug melden / Feature vorschlagen',
+    ariaLabel: 'Issues öffnen'
   },
   {
     name: 'Email',
     icon: 'mdi-email',
-    url: 'mailto:qassemjehad@gmail.com',
-    tooltip: 'Senden Sie mir eine E-Mail'
+    url: `mailto:${emailAddress}`,
+    tooltip: 'E-Mail senden',
+    ariaLabel: 'E-Mail senden'
   }
 ]
 
-const themeIcon = computed(() => 
-  isDark.value ? 'mdi-weather-sunny' : 'mdi-weather-night'
+// Theme: light / dark / system
+type ThemeMode = 'light' | 'dark' | 'system'
+
+const themeMode = ref<ThemeMode>(
+  (localStorage.getItem('theme:mode') as ThemeMode) ?? 'system'
 )
 
-function toggleTheme() {
-  isDark.value = !isDark.value
-  theme.global.name.value = isDark.value ? 'dark' : 'light'
-  localStorage.setItem('theme:isDark', JSON.stringify(isDark.value))
+const mq = typeof window !== 'undefined' ? window.matchMedia?.('(prefers-color-scheme: dark)') : null
+const systemPrefersDark = ref(!!mq?.matches)
+
+function applyTheme() {
+  const dark =
+    themeMode.value === 'system' ? systemPrefersDark.value : themeMode.value === 'dark'
+  theme.global.name.value = dark ? 'dark' : 'light'
+}
+
+function cycleTheme() {
+  themeMode.value =
+    themeMode.value === 'light' ? 'dark' : themeMode.value === 'dark' ? 'system' : 'light'
+  localStorage.setItem('theme:mode', themeMode.value)
+  applyTheme()
+}
+
+const themeIcon = computed(() => {
+  if (themeMode.value === 'system') return 'mdi-theme-light-dark'
+  return themeMode.value === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+})
+
+const themeTooltip = computed(() => {
+  if (themeMode.value === 'system') return 'Theme: System (Klick: Hell)'
+  return themeMode.value === 'dark' ? 'Theme: Dunkel (Klick: System)' : 'Theme: Hell (Klick: Dunkel)'
+})
+
+async function copyEmail() {
+  try {
+    await navigator.clipboard.writeText(emailAddress)
+    snackbarText.value = 'E-Mail kopiert ✅'
+  } catch {
+    snackbarText.value = 'Kopieren nicht möglich ❌'
+  } finally {
+    snackbar.value = true
+  }
 }
 
 function scrollToTop() {
@@ -155,27 +263,34 @@ function handleScroll() {
   const scrollY = window.scrollY
   const windowHeight = window.innerHeight
   const documentHeight = document.documentElement.scrollHeight
-  
+
   scrolled.value = scrollY > 100
-  
-  // Footer fixieren, wenn man sich am Ende der Seite befindet
-  // oder wenn die Seite nicht hoch genug ist, um zu scrollen
+
+  const max = Math.max(1, documentHeight - windowHeight)
+  scrollProgress.value = Math.min(100, Math.max(0, (scrollY / max) * 100))
+
+  // Footer fixieren, wenn am Ende oder zu wenig Content
   const isAtBottom = scrollY + windowHeight >= documentHeight - 100
   const isShortPage = documentHeight <= windowHeight
-  
   fixed.value = isAtBottom || isShortPage
+}
+
+function onSystemThemeChange(e: MediaQueryListEvent) {
+  systemPrefersDark.value = e.matches
+  applyTheme()
 }
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
-  // Initial check
   handleScroll()
-  // Initialize theme
-  theme.global.name.value = isDark.value ? 'dark' : 'light'
+
+  mq?.addEventListener?.('change', onSystemThemeChange)
+  applyTheme()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  mq?.removeEventListener?.('change', onSystemThemeChange)
 })
 </script>
 
@@ -193,7 +308,11 @@ onUnmounted(() => {
 
   &.footer-scrolled {
     backdrop-filter: blur(10px);
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(102, 126, 234, 0.95) 0%,
+      rgba(118, 75, 162, 0.95) 100%
+    ) !important;
   }
 
   // Fixierte Position (immer sichtbar am unteren Bildschirmrand)
@@ -204,8 +323,7 @@ onUnmounted(() => {
     right: 0;
     z-index: 1000;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    
-    // Wave anpassen für fixierte Position
+
     .footer-wave {
       display: none; // Wave ausblenden wenn fixiert
     }
@@ -214,14 +332,14 @@ onUnmounted(() => {
 
 // Sicherstellen, dass der Hauptinhalt genug Platz für den fixierten Footer hat
 :deep(.v-main) {
-  min-height: calc(100vh - 80px); // Viewport height minus footer height
-  padding-bottom: 80px; // Platz für den Footer
+  min-height: calc(100vh - 80px);
+  padding-bottom: 80px;
   box-sizing: border-box;
 }
 
-// Für Seiten mit wenig Inhalt - sicherstellen, dass Footer unten bleibt
+// Für Seiten mit wenig Inhalt
 :deep(.page-content) {
-  min-height: calc(100vh - 80px - 64px); // Viewport minus footer und header
+  min-height: calc(100vh - 80px - 64px);
   display: flex;
   flex-direction: column;
 }
@@ -231,6 +349,16 @@ onUnmounted(() => {
   z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+// Progress bar styling
+.footer-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.7;
+  z-index: 3;
 }
 
 .footer-content {
@@ -356,11 +484,22 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 }
 
-// Specific hover colors for social platforms
-.social-github:hover { background: linear-gradient(135deg, rgba(51, 51, 51, 0.3) 0%, rgba(110, 84, 148, 0.3) 100%) !important; }
-.social-linkedin:hover { background: linear-gradient(135deg, rgba(0, 119, 181, 0.3) 0%, rgba(0, 96, 151, 0.3) 100%) !important; }
-.social-twitter:hover { background: linear-gradient(135deg, rgba(29, 161, 242, 0.3) 0%, rgba(23, 133, 202, 0.3) 100%) !important; }
-.social-email:hover { background: linear-gradient(135deg, rgba(219, 68, 55, 0.3) 0%, rgba(183, 28, 28, 0.3) 100%) !important; }
+// Specific hover colors
+.social-github:hover {
+  background: linear-gradient(135deg, rgba(51, 51, 51, 0.3) 0%, rgba(110, 84, 148, 0.3) 100%) !important;
+}
+.social-source:hover {
+  background: linear-gradient(135deg, rgba(20, 20, 20, 0.25) 0%, rgba(100, 100, 100, 0.25) 100%) !important;
+}
+.social-issues:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(239, 68, 68, 0.25) 100%) !important;
+}
+.social-email:hover {
+  background: linear-gradient(135deg, rgba(219, 68, 55, 0.3) 0%, rgba(183, 28, 28, 0.3) 100%) !important;
+}
+.social-copy:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.22) 0%, rgba(16, 185, 129, 0.22) 100%) !important;
+}
 
 .theme-btn {
   position: relative;
@@ -425,7 +564,7 @@ onUnmounted(() => {
   position: fixed !important;
   bottom: 100px;
   right: 24px;
-  z-index: 1001; // Über dem Footer
+  z-index: 1001;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   color: white !important;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
@@ -439,27 +578,17 @@ onUnmounted(() => {
 
 // Animations
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.1);
-  }
-  50% {
-    transform: scale(1);
-  }
-  75% {
-    transform: scale(1.05);
-  }
+  0%,
+  100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.05); }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+  0%,
+  100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
 }
 
 .social-btn {
@@ -469,9 +598,10 @@ onUnmounted(() => {
 .social-btn:nth-child(2) { animation-delay: 0.2s; }
 .social-btn:nth-child(3) { animation-delay: 0.4s; }
 .social-btn:nth-child(4) { animation-delay: 0.6s; }
-.theme-btn { animation-delay: 0.8s; }
+.social-btn:nth-child(5) { animation-delay: 0.8s; }
+.theme-btn { animation-delay: 1s; }
 
-// Responsive design
+// Responsive
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
@@ -495,7 +625,6 @@ onUnmounted(() => {
     right: 16px;
   }
 
-  // Anpassung für mobile Geräte
   :deep(.v-main) {
     padding-bottom: 80px;
   }
@@ -530,9 +659,13 @@ onUnmounted(() => {
 :deep(.v-theme--dark) {
   .custom-footer {
     background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%) !important;
-    
+
     &.footer-scrolled {
-      background: linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(26, 32, 44, 0.95) 100%) !important;
+      background: linear-gradient(
+        135deg,
+        rgba(45, 55, 72, 0.95) 0%,
+        rgba(26, 32, 44, 0.95) 100%
+      ) !important;
     }
   }
 
@@ -541,7 +674,7 @@ onUnmounted(() => {
   }
 }
 
-// Reduced motion support
+// Reduced motion
 @media (prefers-reduced-motion: reduce) {
   .social-btn,
   .theme-btn {
@@ -550,6 +683,10 @@ onUnmounted(() => {
 
   .scroll-top-btn:hover {
     transform: none;
+  }
+
+  .heart-icon {
+    animation: none;
   }
 }
 </style>
