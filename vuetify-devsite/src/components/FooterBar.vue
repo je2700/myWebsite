@@ -189,20 +189,6 @@ const socialLinks = [
     ariaLabel: 'GitHub Profil öffnen'
   },
   {
-    name: 'Source',
-    icon: 'mdi-source-repository',
-    url: repoUrl,
-    tooltip: 'Source Code ansehen',
-    ariaLabel: 'Source Code öffnen'
-  },
-  {
-    name: 'Issues',
-    icon: 'mdi-bug',
-    url: `${repoUrl}/issues`,
-    tooltip: 'Bug melden / Feature vorschlagen',
-    ariaLabel: 'Issues öffnen'
-  },
-  {
     name: 'Email',
     icon: 'mdi-email',
     url: `mailto:${emailAddress}`,
