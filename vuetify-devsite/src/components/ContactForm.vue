@@ -28,7 +28,7 @@
               <v-icon icon="mdi-account-outline" size="20" class="mr-2" color="primary" />
               <span class="text-subtitle-2 font-weight-medium">Ihr Name</span>
             </div>
-            <v-text-field 
+            <v-text-field
               v-model="name"
               variant="plain"
               placeholder="*Geben Sie Ihren vollständigen Namen ein"
@@ -50,7 +50,7 @@
               <v-icon icon="mdi-email-outline" size="20" class="mr-2" color="primary" />
               <span class="text-subtitle-2 font-weight-medium">E-Mail-Adresse</span>
             </div>
-            <v-text-field 
+            <v-text-field
               v-model="email"
               type="email"
               variant="plain"
@@ -92,7 +92,10 @@
 
         <!-- Zeichenzähler -->
         <div class="character-counter">
-          <span class="text-caption" :class="(message?.length || 0) > 500 ? 'text-error' : 'text-disabled'">
+          <span
+            class="text-caption"
+            :class="(message?.length || 0) > 500 ? 'text-error' : 'text-disabled'"
+          >
             {{ message?.length || 0 }}/500
           </span>
         </div>
@@ -150,12 +153,7 @@
       <span class="snackbar-text">{{ snack.text }}</span>
     </div>
     <template v-slot:actions>
-      <v-btn
-        icon
-        variant="text"
-        @click="snack.show = false"
-        :color="snack.error ? 'white' : 'white'"
-      >
+      <v-btn icon variant="text" @click="snack.show = false" :color="'white'">
         <v-icon icon="mdi-close" />
       </v-btn>
     </template>
@@ -216,7 +214,7 @@ function reset() {
 async function onSubmit() {
   // Show all errors immediately when submit is clicked
   showErrors.value = true
-  
+
   // Check if form has any validation errors
   if (hasErrors.value) {
     snack.value = {
@@ -226,9 +224,9 @@ async function onSubmit() {
     }
     return
   }
-  
+
   loading.value = true
-  
+
   const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT
   const formData = {
     name: name.value,
@@ -243,7 +241,7 @@ async function onSubmit() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          Accept: 'application/json'
         },
         body: JSON.stringify(formData)
       })
@@ -260,15 +258,20 @@ async function onSubmit() {
     } else {
       // Fallback: mailto opens email client
       const mailtoBody = `Name: ${formData.name}\nE-Mail: ${formData.email}\n\nNachricht:\n${formData.message}`
-      window.location.href = `mailto:${encodeURIComponent('qassemjehad@gmail.com')}?subject=${encodeURIComponent('Neue Kontaktanfrage')}&body=${encodeURIComponent(mailtoBody)}`
-      
+      const subject = `Neue Kontaktanfrage von ${formData.name || 'Unbekannt'}`
+
+      window.location.href =
+        `mailto:${encodeURIComponent('qassemjehad@outlook.de')}` +
+        `?subject=${encodeURIComponent(subject)}` +
+        `&body=${encodeURIComponent(mailtoBody)}`
+
       snack.value = {
         show: true,
         text: '📧 E-Mail-Client wird geöffnet...',
         error: false
       }
     }
-    
+
     reset()
   } catch (e: any) {
     console.error('Contact form error:', e)
