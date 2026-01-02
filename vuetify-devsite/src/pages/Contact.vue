@@ -74,7 +74,7 @@
                 <v-card-text class="info-content">
                   <h3 class="info-title">Lassen Sie uns ins Gespräch kommen</h3>
                   <p class="info-description">
-                    Melden Sie sich gerne über einen dieser Kanäle. Ich bin jederzeit erreichbar, 
+                    Melden Sie sich gerne über meine E-Mail-Adresse. Ich bin jederzeit erreichbar, 
                     um mögliche Kooperationen zu besprechen oder Ihre Fragen zu beantworten.
                   </p>
 
@@ -86,7 +86,7 @@
                       </div>
                       <div class="method-info">
                         <div class="method-label">E-Mail</div>
-                        <a href="mailto:qassemjehad@gmail.com" class="method-value">qassemjehad@gmail.com</a>
+                        <a href="mailto:qassemjehad@gmail.com" class="method-value">qassemjehad@outlook.de</a>
                       </div>
                     </div>
 
