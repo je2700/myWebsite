@@ -109,7 +109,7 @@
                   <div class="contact-info">
                     <div class="contact-item">
                       <v-icon icon="mdi-email" size="16" />
-                      <span>qassemjehad@gmail.com</span>
+                      <span>qassemjehad@outlook.de</span>
                     </div>
                     <div class="contact-item">
                       <v-icon icon="mdi-map-marker" size="16" />
