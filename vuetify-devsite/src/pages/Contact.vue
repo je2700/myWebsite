@@ -36,7 +36,7 @@
             </h2>
 
             <p class="contact-subtitle">
-              Ich freue mich immer, neue Projekte, innovative Ideen oder mögliche Kooperationen zu besprechen. 
+              Ich freue mich immer, neue Projekte, innovative Ideen oder mögliche Kooperationen zu besprechen.
               Ob Sie ein konkretes Projekt im Kopf haben oder einfach nur Hallo sagen möchten – ich freue mich von Ihnen zu hören.
             </p>
 
@@ -74,7 +74,7 @@
                 <v-card-text class="info-content">
                   <h3 class="info-title">Lassen Sie uns ins Gespräch kommen</h3>
                   <p class="info-description">
-                    Melden Sie sich gerne über meine E-Mail-Adresse. Ich bin jederzeit erreichbar, 
+                    Melden Sie sich gerne über meine E-Mail-Adresse. Ich bin jederzeit erreichbar,
                     um mögliche Kooperationen zu besprechen oder Ihre Fragen zu beantworten.
                   </p>
 
@@ -86,7 +86,38 @@
                       </div>
                       <div class="method-info">
                         <div class="method-label">E-Mail</div>
-                        <a href="mailto:qassemjehad@gmail.com" class="method-value">qassemjehad@outlook.de</a>
+
+                        <!-- ✅ überall Outlook + ✨ genial: Copy-to-Clipboard + Tooltip -->
+                        <div class="method-actions">
+                          <a
+                            :href="mailtoHref"
+                            class="method-value"
+                            :title="`E-Mail an ${CONTACT_EMAIL} schreiben`"
+                          >
+                            {{ CONTACT_EMAIL }}
+                          </a>
+
+                          <v-tooltip text="Kopieren" location="top">
+                            <template #activator="{ props }">
+                              <v-btn
+                                v-bind="props"
+                                icon
+                                variant="text"
+                                size="small"
+                                class="copy-btn"
+                                @click="copyEmail"
+                                :aria-label="`E-Mail-Adresse ${CONTACT_EMAIL} kopieren`"
+                              >
+                                <v-icon :icon="copied ? 'mdi-check' : 'mdi-content-copy'" />
+                              </v-btn>
+                            </template>
+                          </v-tooltip>
+                        </div>
+
+                        <div class="method-hint">
+                          <v-icon icon="mdi-lightning-bolt-outline" size="16" class="mr-1" />
+                          <span>{{ copied ? 'Kopiert! Jetzt einfach einfügen 🙌' : '1 Klick kopieren • 1 Klick mailen' }}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -137,9 +168,10 @@
             <v-col cols="12" md="7" class="contact-form-col">
               <v-card class="form-container" elevation="12" rounded="xl">
                 <v-card-text class="form-content">
-                  <ContactForm />
+                  <!-- ✨ genial: Empfänger wird als Prop weitergegeben (optional) -->
+                  <ContactForm :to-email="CONTACT_EMAIL" />
                 </v-card-text>
-                
+
                 <!-- Form-Dekoration -->
                 <div class="form-decoration">
                   <div class="decoration-dot dot-1"></div>
@@ -152,11 +184,31 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- Snack für Copy-Feedback -->
+    <v-snackbar
+      v-model="copySnack"
+      color="success"
+      :timeout="2500"
+      location="bottom"
+      rounded="pill"
+      elevation="12"
+    >
+      <v-icon icon="mdi-check-circle-outline" class="mr-2" />
+      E-Mail kopiert: {{ CONTACT_EMAIL }}
+    </v-snackbar>
   </section>
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import ContactForm from '@/components/ContactForm.vue'
+
+/**
+ * ✅ Einmal definieren, überall nutzen
+ * (So vermeidest du, dass irgendwo noch gmail “hängen bleibt”.)
+ */
+const CONTACT_EMAIL = 'qassemjehad@outlook.de'
 
 const socialLinks = [
   {
@@ -165,7 +217,46 @@ const socialLinks = [
     url: 'https://github.com/je2700'
   }
 ]
+
+/**
+ * Mailto-Link (sauber encoded + mit Betreff)
+ */
+const mailtoHref = computed(() => {
+  const subject = 'Kontaktanfrage über die Website'
+  return `mailto:${encodeURIComponent(CONTACT_EMAIL)}?subject=${encodeURIComponent(subject)}`
+})
+
+/**
+ * ✨ Genial: Copy to clipboard mit Feedback
+ */
+const copied = ref(false)
+const copySnack = ref(false)
+
+async function copyEmail() {
+  try {
+    await navigator.clipboard.writeText(CONTACT_EMAIL)
+    copied.value = true
+    copySnack.value = true
+    window.setTimeout(() => (copied.value = false), 1800)
+  } catch {
+    // Fallback für ältere Browser
+    const ta = document.createElement('textarea')
+    ta.value = CONTACT_EMAIL
+    ta.setAttribute('readonly', 'true')
+    ta.style.position = 'absolute'
+    ta.style.left = '-9999px'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+
+    copied.value = true
+    copySnack.value = true
+    window.setTimeout(() => (copied.value = false), 1800)
+  }
+}
 </script>
+
 
 <style scoped lang="scss">
 .contact-section {
@@ -615,6 +706,24 @@ const socialLinks = [
       font-size: 24px;
     }
   }
+}
+
+.method-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.copy-btn {
+  transform: translateY(-1px);
+}
+
+.method-hint {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+  font-size: 0.85rem;
 }
 
 // Reduced motion support
