@@ -78,7 +78,7 @@
       <router-link to="/" class="brand-link">
         <div class="brand-container">
           <v-img
-            src="/favicon.png?v=2"
+            :src="logoSrc"
             alt="Logo"
             width="48"
             height="48"
@@ -147,6 +147,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import FooterBar from '../components/FooterBar.vue'
 
 const title = 'Jehad Qassem'
+const logoSrc = import.meta.env.BASE_URL + 'favicon.png?v=2'
 const drawer = ref(false)
 const scrolled = ref(false)
 const items = [

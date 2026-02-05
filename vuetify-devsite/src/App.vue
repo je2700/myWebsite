@@ -38,14 +38,16 @@
           color="primary"
           class="loading-spinner"
         >
-          <v-img
-              src="/favicon.png?v=2"
-            alt="Logo"
-            class="loader-logo"
-            width="72"
-            height="72"
-            contain
-          />
+          <v-avatar size="72" class="loader-avatar">
+            <v-img
+              :src="logoSrc"
+              alt="Logo"
+              class="loader-logo"
+              width="72"
+              height="72"
+              contain
+            />
+          </v-avatar>
         </v-progress-circular>
         <div class="loading-text">Lade beeindruckende Inhalte...</div>
       </div>
@@ -85,6 +87,7 @@ import { useRouter } from 'vue-router'
 import DefaultLayout from './layouts/DefaultLayout.vue'
 
 const router = useRouter()
+const logoSrc = import.meta.env.BASE_URL + 'favicon.png?v=2'
 const loading = ref(false)
 const snackbar = reactive({
   visible: false,
@@ -337,6 +340,12 @@ defineExpose({
   background: transparent;
   border: none;
   border-radius: 0;
+}
+
+.loader-avatar {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .loading-text {
