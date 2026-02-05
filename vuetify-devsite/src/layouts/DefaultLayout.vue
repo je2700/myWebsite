@@ -78,7 +78,7 @@
       <router-link to="/" class="brand-link">
         <div class="brand-container">
           <v-img
-            src="/favicon.png"
+            src="/favicon1.png"
             alt="Logo"
             width="48"
             height="48"
