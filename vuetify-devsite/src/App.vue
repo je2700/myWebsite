@@ -39,7 +39,7 @@
           class="loading-spinner"
         >
           <v-img
-            src="/favicon1.png"
+              src="/favicon.png?v=2"
             alt="Logo"
             class="loader-logo"
             width="72"
