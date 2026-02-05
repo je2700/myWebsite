@@ -33,11 +33,20 @@
       <div v-if="loading" class="global-loading">
         <v-progress-circular
           indeterminate
-          size="64"
+          size="108"
           width="4"
           color="primary"
           class="loading-spinner"
-        />
+        >
+          <v-img
+            src="/favicon.png"
+            alt="Logo"
+            class="loader-logo"
+            width="72"
+            height="72"
+            contain
+          />
+        </v-progress-circular>
         <div class="loading-text">Lade beeindruckende Inhalte...</div>
       </div>
     </v-fade-transition>
@@ -319,6 +328,15 @@ defineExpose({
 .loading-spinner {
   margin-bottom: 20px;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.loader-logo {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
 
 .loading-text {

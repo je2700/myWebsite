@@ -77,7 +77,14 @@
       <!-- Logo/Marke -->
       <router-link to="/" class="brand-link">
         <div class="brand-container">
-          <v-icon icon="mdi-code-braces" size="28" class="brand-icon" color="primary" />
+          <v-img
+            src="/favicon.png"
+            alt="Logo"
+            width="48"
+            height="48"
+            class="brand-logo"
+            contain
+          />
           <v-toolbar-title class="brand-title">
             <span class="brand-text">{{ title }}</span>
           </v-toolbar-title>
@@ -137,14 +144,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
 import FooterBar from '../components/FooterBar.vue'
 
 const title = 'Jehad Qassem'
 const drawer = ref(false)
 const scrolled = ref(false)
-const route = useRoute()
-
 const items = [
   { title: 'Home', to: '/', icon: 'mdi-home' },
   { title: 'Projekte', to: '/projects', icon: 'mdi-view-grid-outline' },
@@ -343,16 +347,26 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 8px 0;
+  margin-left: 6px;
 }
 
-.brand-icon {
-  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  filter: drop-shadow(0 2px 6px rgba(102, 126, 234, 0.35));
 }
 
 .brand-title {
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
+  white-space: nowrap;
+  overflow: visible;
+  flex: 0 0 auto;
 }
 
 .brand-text {
