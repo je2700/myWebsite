@@ -179,6 +179,7 @@ const appVersion = import.meta.env.VITE_APP_VERSION ?? 'dev'
 
 const emailAddress = 'qassemjehad@outlook.de'
 const repoUrl = `https://github.com/${username}`
+const linkedinUrl = 'https://www.linkedin.com/in/jehad-qassem-3455373ab/'
 
 const socialLinks = [
   {
@@ -187,6 +188,13 @@ const socialLinks = [
     url: repoUrl,
     tooltip: 'Code auf GitHub ansehen',
     ariaLabel: 'GitHub Profil öffnen'
+  },
+  {
+    name: 'LinkedIn',
+    icon: 'mdi-linkedin',
+    url: linkedinUrl,
+    tooltip: 'LinkedIn Profil ansehen',
+    ariaLabel: 'LinkedIn Profil öffnen'
   },
   {
     name: 'Email',
@@ -479,6 +487,9 @@ onUnmounted(() => {
 }
 .social-issues:hover {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(239, 68, 68, 0.25) 100%) !important;
+}
+.social-linkedin:hover {
+  background: linear-gradient(135deg, rgba(10, 102, 194, 0.28) 0%, rgba(0, 119, 181, 0.28) 100%) !important;
 }
 .social-email:hover {
   background: linear-gradient(135deg, rgba(219, 68, 55, 0.3) 0%, rgba(183, 28, 28, 0.3) 100%) !important;

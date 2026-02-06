@@ -74,7 +74,7 @@
                 <v-card-text class="info-content">
                   <h3 class="info-title">Lassen Sie uns ins Gespräch kommen</h3>
                   <p class="info-description">
-                    Melden Sie sich gerne über meine E-Mail-Adresse. Ich bin jederzeit erreichbar,
+                    Melden Sie sich gerne per E-Mail oder LinkedIn. Ich bin jederzeit erreichbar,
                     um mögliche Kooperationen zu besprechen oder Ihre Fragen zu beantworten.
                   </p>
 
@@ -215,6 +215,11 @@ const socialLinks = [
     name: 'GitHub',
     icon: 'mdi-github',
     url: 'https://github.com/je2700'
+  },
+  {
+    name: 'LinkedIn',
+    icon: 'mdi-linkedin',
+    url: 'https://www.linkedin.com/in/jehad-qassem-3455373ab/'
   }
 ]
 
